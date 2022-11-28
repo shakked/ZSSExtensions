@@ -53,7 +53,6 @@ open class PowerButton: UIButton {
     
     private var activityIndicator: UIActivityIndicatorView?
     private var temporaryTitle: String?
-    private var temporaryAttributedTitle: NSAttributedString?
     private var temporaryImage: UIImage?
     public var greedyTouches = true
     private var isLoading: Bool = false
@@ -85,19 +84,6 @@ open class PowerButton: UIButton {
         addTarget(self, action: #selector(logTouchUpOutside), for: .touchUpOutside)
         addTarget(self, action: #selector(logTouchDownRepeat), for: .touchDownRepeat)
         addTarget(self, action: #selector(logAllTouchEvents), for: .allTouchEvents)
-        titleEdgeInsets = UIEdgeInsets(top: 0.01, left: 0.01, bottom: 0.01, right: 0.01)
-        titleLabel?.adjustsFontSizeToFitWidth = true
-        titleLabel?.minimumScaleFactor = 0.01
-        titleLabel?.removeFromSuperview()
-        addSubview(titleLabel!)
-        titleLabel?.textAlignment = .center
-        titleLabel?.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            titleLabel!.widthAnchor.constraint(equalTo: widthAnchor),
-            titleLabel!.heightAnchor.constraint(equalTo: heightAnchor),
-            titleLabel!.centerXAnchor.constraint(equalTo: centerXAnchor),
-            titleLabel!.centerYAnchor.constraint(equalTo: centerYAnchor),
-        ])
     }
     
     @objc private func logTouchDragEnter() {
@@ -161,7 +147,6 @@ open class PowerButton: UIButton {
         isLoading = true
         isEnabled = false
         temporaryTitle = titleLabel?.text
-        temporaryAttributedTitle = titleLabel?.attributedText
         temporaryImage = imageView?.image
         UIView.animate(withDuration: 0.1) {
             self.titleLabel?.alpha = 0.0
@@ -189,9 +174,6 @@ open class PowerButton: UIButton {
         isEnabled = true
         if let temporaryTitle = temporaryTitle {
             setTitle(temporaryTitle, for: .normal)
-        }
-        if let temporaryAttributedTitle = temporaryAttributedTitle {
-            setAttributedTitle(temporaryAttributedTitle, for: .normal)
         }
         if let temporaryImage = temporaryImage {
             setImage(temporaryImage, for: .normal)
